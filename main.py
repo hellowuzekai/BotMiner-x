@@ -1,19 +1,17 @@
 # !/usr/bin/env python
 #  -*- coding: utf-8 -*-
-import sys
 import random
 from lib.common import read_pcap, split_cflow, split_flow, save
 from lib.calc import scale_cflow
-from lib.data import C_FLOWS
+from lib.data import cpanel
+from lib.option import init_options
+from lib.parse import cliparse
 
 
 def main():
-    if len(sys.argv) < 2 or '-h' in sys.argv:
-        msg = "Usage:\n  python pcapdata.py [pcap-file]\n" \
-              "Example:\n  python pcapdata.py ../ca1_http.pcap"
-        sys.exit(msg)
-
-    read_pcap(sys.argv[1])
+    cliparse()
+    init_options()
+    read_pcap()
     split_flow()
     split_cflow()
     scale_cflow()
@@ -23,7 +21,7 @@ def main():
 
 # 随机输出一个Cflow的具体信息作为测试
 def test():
-    cf = random.choice(C_FLOWS)
+    cf = random.choice(cpanel.C_FLOW)
     print '[test] random cf in C_FLOW:'
     print cf.__dict__
 

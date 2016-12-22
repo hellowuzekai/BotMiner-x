@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 #  -*- coding: utf-8 -*-
 
-from data import START_TIME, TIME_UNIT, EPOCH
+from data import cpanel
 import random
 from scapy.all import *
 
@@ -24,11 +24,12 @@ class Cflow:
     def calc(self):
         # TODO 由于我们的测试数据都是几分钟的，按小时算数据无效，这里先用random模拟结果测试程序 (PS:增加全局变量 TIME_UNIT 作为可调整的时间单位)
         for f in self.flows:
-            leftIndex = int((f.packets[0].timestamp - START_TIME[0]) // TIME_UNIT)  # 有个坑，普通变量拿不到改变后的值，用list引用可以
-            rightIndex = int((f.packets[-1].timestamp - START_TIME[0]) // TIME_UNIT + 1)
+            leftIndex = int(
+                (f.packets[0].timestamp - cpanel.START_TIME[0]) // cpanel.TIME_UNIT)  # 有个坑，普通变量拿不到改变后的值，用list引用可以
+            rightIndex = int((f.packets[-1].timestamp - cpanel.START_TIME[0]) // cpanel.TIME_UNIT + 1)
             for i in range(leftIndex, rightIndex):
                 self.fph.append(i)
-        #self.fph = [random.choice([0, 1]) for i in range(self.epoch)]
+        # self.fph = [random.choice([0, 1]) for i in range(self.epoch)]
         self.bps = [f.bps for f in self.flows]
         self.bpp = [f.bpp for f in self.flows]
         self.ppf = [f.ppf for f in self.flows]
@@ -61,11 +62,11 @@ class Flow:
         total_byte = sum([packet.byte for packet in self.packets])
         timestamp_sorted = sorted([packet.timestamp for packet in self.packets])
         total_time_second = timestamp_sorted[-1] - timestamp_sorted[0]
-        # if not total_time_second:
-        #     raise ValueError('invalid dataset.')
-        #     total_time_second =
+        if not total_time_second:
+            print '[error] total-time=0, packet num: %d' % len(self.packets)
+            total_time_second = 999
         self.bps = total_byte / total_time_second
-        #self.bps = random.uniform(1, 5)
+        # self.bps = random.uniform(1, 5)
 
     def _calc_bpp(self):  # 全部大小 除以 包个数
         total_byte = sum([packet.byte for packet in self.packets])
@@ -88,7 +89,7 @@ class Packet:
     def __init__(self, packet, id):
         self.id = id
         self.byte = len(packet)
-        self.timestamp = packet.time  # 转换为秒为单位 #TODO 确认这个是以秒为单位
+        self.timestamp = packet.time
         self.content = str(packet)
         self.ip_src = packet['IP'].src
         self.ip_dst = packet['IP'].dst
