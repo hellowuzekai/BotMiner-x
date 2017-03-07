@@ -95,6 +95,11 @@ class Packet:
         self.ip_dst = packet['IP'].dst
         self.port_src = packet.sport
         self.port_dst = packet.dport
+        try:
+            self.raw = str(packet['Raw']).strip()
+        except Exception,e:
+            self.raw = ""
+
         if bin(packet[TCP].flags)[-1] == '1':
             self.flag = 'Fin'
         elif bin(packet[TCP].flags)[-2] == '1':
