@@ -2,22 +2,22 @@ loader
 ------
 解析pcap文件，结果存入MySQL数据库。
 
-### 准备工作
+**准备工作**
 
 * MySQL环境 `sudo apt-get install mysql-server mysql-client`
 * 启动MySQL服务 `sudo service mysql start`
 
-### 初次使用
+**初次使用** 
 
 * 编辑数据库配置 `vi loader/config.py`
 * 建立数据表结构 `python loader/main.py --init`
 
-### 切分数据包（使用data文件夹下的示例数据，按1000个包切分）
+**切分数据包（使用data文件夹下的示例数据，按1000个包切分）**
 
 * `mkdir testdata`
 * `editcap -c 1000 ../data/bot-brute-2.pcap ./testdata/small.pcap`
 
-### 数据入库
+**数据入库**
 
 * `python main.py ./data2 <GROUP_ID> <TIME> <NOTE>`
 
@@ -38,11 +38,16 @@ loader
 [loader] 177/177 finished.
 ```
 
+
+**TODO**
+
+* 数据入库之前过滤掉部分数据包(非TCP协议/内网/不完整/白名单)
+
 botminer
 --------
-以`GROUP_ID`检索，从库中提取指定的Packets，分类计算flow/cflow值，生成8/52维向量。
+以`GROUP_ID`检索，从库中提取指定的Packets，分类计算flow/cflow值，生成8/52维向量
 
-### TODO
+**TODO**
 
 * 划分13个区间逻辑错误待修改
 * epoch 24小时不合理，待改进
@@ -51,4 +56,7 @@ botminer
 
 web
 ---
-flask开发展示界面
+
+**TODO**
+
+* flask开发展示界面
