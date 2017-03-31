@@ -20,13 +20,15 @@ def main():
     split_flow()
     split_cflow()
     scale_cflow()
-    test()
+    if '--debug' in sys.argv:
+        test()
     save(output_path)
 
 
 # 随机输出一个Cflow的具体信息作为测试
 def test():
     cf = random.choice(cpanel.C_FLOWS)
+    cf.flows = None
     print '[test] random cf in C_FLOWS:'
     print cf.__dict__
 
