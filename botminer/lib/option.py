@@ -7,7 +7,7 @@ from data import cpanel,conf
 def init_options():
     cpanel.START_TIME = 0
     cpanel.EPOCH = 10
-    cpanel.TIME_UNIT = 60  # 单位 秒，一小时=3600秒 此量应与 EPOCH 一同变化
+    cpanel.TIME_UNIT = 6  # 单位 秒，一小时=3600秒 此量应与 EPOCH 一同变化
     cpanel.PACKETS = []
     cpanel.FLOWS = []
     cpanel.C_FLOWS = []

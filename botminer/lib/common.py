@@ -11,7 +11,6 @@ def read_pcap(group_id):
     sql = "select * from Packets where GROUP_ID={} order by id".format(group_id)
 
     raw_packets = cursor.fetchmany(cursor.execute(sql))
-    print(raw_packets)
     print '[database] Selected Packets: {}'.format(len(raw_packets))
 
     cpanel.START_TIME = raw_packets[0][2]
@@ -23,21 +22,26 @@ def read_pcap(group_id):
 
 
 def split_flow():
-    flows = []
-    count = 1
+    flows = {}
     for p in cpanel.PACKETS:
-        for f in flows:
-            if f.ip_src == p.ip_src and f.ip_dst == p.ip_dst and f.port_src == p.port_src and f.port_dst == p.port_dst:
-                f.add_packet(p)
-                break
+        vector = ':'.join([p.ip_src, p.ip_dst, p.port_src, p.port_dst])
+        if vector in flows:
+            flows[vector].append(p)
         else:
-            flow = Flow(count, p)
-            count += 1
-            flow.add_packet(p)
-            flows.append(flow)  # 改为中间变量存储未进行第二次过滤的flows
+            flows[vector] = [p]
+    print '[common] Total flows: {}'.format(len(flows))
 
-    cpanel.FLOWS = flows
-    print '[common] Total flows: %d' % len(cpanel.FLOWS)
+    count = 1
+    filtered_flows = []
+    for _vector, _packets in flows.iteritems():
+        if len(_packets) < 2:  # 删除只有一个包的flow，根据测试效果决定是否选用
+            pass
+        else:
+            filtered_flows.append(Flow(count, _vector, _packets))
+            count += 1
+
+    cpanel.FLOWS = filtered_flows
+    print '[common] Instant flows: {}'.format(len(cpanel.FLOWS))
 
     # 计算三个关键值
     for f in cpanel.FLOWS:
@@ -45,29 +49,29 @@ def split_flow():
 
 
 def split_cflow():
+    cflow = {}
+    for f in cpanel.FLOWS:
+        vector = f.ip_src
+        if vector in cflow:
+            cflow[vector].append(f)
+        else:
+            cflow[vector] = [f]
+    print '[common] Total C_flows: {}'.format(len(cflow))
+
     count = 1
-    for flow in cpanel.FLOWS:
-        for f in cpanel.C_FLOWS:
-            # 这里根据源IP划分CFlow，与论文不同 TODO 验证可行性
-            # if flow.ip_src == f.ip_src and flow.ip_dst == f.ip_dst and flow.port_dst == f.port_dst:
-            if flow.ip_src == f.ip_src:
-                f.add_flow(flow)
-                break
-        cflow = Cflow(count, 24, flow)
-        cflow.add_flow(flow)
-        cpanel.C_FLOWS.append(cflow)
+    filtered_cflows = []
+    for _vector, _flows in cflow.iteritems():
+        # TODO add filter here
+        filtered_cflows.append(Cflow(count, 24, _vector, _flows))  # TODO epoch调整为全局变量？动态获取？
         count += 1
 
-    # 计算4个关键值
-    for c in cpanel.C_FLOWS:
-        c.calc()
-
-    print '[common] Total c-flows: %d' % len(cpanel.C_FLOWS)
+    cpanel.C_FLOWS = filtered_cflows
+    print '[common] Instant C_flows: {}'.format(len(cpanel.C_FLOWS))
 
 
 def save(output_path):
     with open(output_path, 'w') as f:  # TODO more checks here
         for cf in cpanel.C_FLOWS:
-            line = ','.join([str(cf.id), str(cf.fph), str(cf.bps), str(cf.bpp), str(cf.ppf), str(cf.ip_src),
-                             str(cf.ip_dst)]).replace('[', '').replace(']', '').replace(' ', '')
+            line = ','.join([str(cf.id), str(cf.fph), str(cf.bps), str(cf.bpp), str(cf.ppf), str(cf.ip_src)]).replace(
+                '[', '').replace(']', '').replace(' ', '')
             f.write(line + '\n')

@@ -10,7 +10,7 @@ from lib.option import init_options
 
 def main():
     if len(sys.argv) < 3:
-        exit('Usage: python main.py <GROUP_ID> <OUTPUT_PATH>\n'
+        exit('Usage: python main.py <GROUP_ID> <OUTPUT_PATH> [--debug]\n'
              'Example: python main.py 2 ./output/result.csv')
     group = sys.argv[1]
     output_path = sys.argv[2]
