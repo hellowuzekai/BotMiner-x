@@ -49,9 +49,9 @@ botminer
 
 **TODO**
 
-* 划分13个区间逻辑错误待修改
+* 划分13个区间逻辑错误待修改 (完成)
 * epoch 24小时不合理，待改进
-* cflow划分方式尝试只按ip_src分类
+* cflow划分方式尝试只按ip_src分类 (完成)
 * 核心算法(x-means/others)待添加
 
 web
