@@ -2,27 +2,34 @@
 #  -*- coding: utf-8 -*-
 import random
 import sys
-from lib.common import read_pcap, split_cflow, split_flow, save
+from lib.common import split_cflow, split_flow, save
 from lib.calc import scale_cflow
 from lib.data import cpanel
 from lib.option import init_options
+from lib.database import save_calc_results,read_packets
 
 
 def main():
     if len(sys.argv) < 3:
         exit('Usage: python main.py <GROUP_ID> <OUTPUT_PATH> [--debug]\n'
              'Example: python main.py 2 ./output/result.csv')
-    group = sys.argv[1]
-    output_path = sys.argv[2]
+    cpanel.group = sys.argv[1]
 
     init_options()
-    read_pcap(group)
+    read_packets(cpanel.group)
     split_flow()
     split_cflow()
     scale_cflow()
+
+    if '--save' in sys.argv:
+        save_calc_results()
+
     if '--debug' in sys.argv:
         test()
-    save(output_path)
+
+    if '--outfile' in sys.argv:
+        output_path = './output/out.txt'
+        save(output_path)
 
 
 # 随机输出一个Cflow的具体信息作为测试

@@ -5,10 +5,11 @@ from data import cpanel
 
 
 class Cflow:
-    def __init__(self, id, epoch, vector, flows):
+    def __init__(self, id, group, epoch, vector, flows):
         self.epoch = int(epoch)
         self.id = int(id)
         self.ip_src = vector  # TODO 暂时用ip_src定义cflow
+        self.group = group
         # self.ip_dst = flow.ip_dst
         # self.port_src = flow.port_src
         # self.port_dst = flow.port_dst

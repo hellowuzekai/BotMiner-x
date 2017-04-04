@@ -36,6 +36,22 @@ def init_database():
              foreign key(GROUP_ID) references DataGroup(ID)
              )"""
 
+    sql = """CREATE TABLE  Cflow(
+             ID INT NOT NULL AUTO_INCREMENT,
+             GROUP_ID INT NOT NULL,
+             IP_SRC VARCHAR(20),
+             IP_DST VARCHAR(20),
+             PORT_SRC INT,
+             PORT_DST INT,
+             FLOWS INT NOT NULL,
+             FPH_13 VARCHAR (100) NOT NULL,
+             PPF_13 VARCHAR (100) NOT NULL,
+             BPP_13 VARCHAR (100) NOT NULL,
+             BPS_13 VARCHAR (100) NOT NULL,
+             NOTE CHAR (100),
+             PRIMARY KEY (ID),
+             foreign key(GROUP_ID) references DataGroup(ID)
+             )"""
     cursor.execute(sql)
 
     db.close()
@@ -60,12 +76,14 @@ def insert_packets():
         pcap = rdpcap(filename)[TCP]
         for i in xrange(len(pcap)):
             length = len(pcap[i])
-            timestamp = pcap[i].time - int(pcap[i].time) / 100 * 100  # below 100s
-            ip_src = pcap[i]['IP'].src
-            ip_dst = pcap[i]['IP'].dst
-            port_src = str(pcap[i]['IP'].sport)
-            port_dst = str(pcap[i]['IP'].dport)
-
+            try:
+                timestamp = pcap[i].time - int(pcap[i].time) / 100 * 100  # below 100s
+                ip_src = pcap[i]['IP'].src
+                ip_dst = pcap[i]['IP'].dst
+                port_src = str(pcap[i]['IP'].sport)
+                port_dst = str(pcap[i]['IP'].dport)
+            except:
+                continue
             """
             <Ether  dst=00:23:89:3a:8b:08 src=00:0e:c6:c2:5f:d8 type=0x800 |<IP  version=4L ihl=5L tos=0x0 len=40 id=34019 flags=DF frag=0L ttl=64 proto=tcp chksum=0x9920 src=172.29.90.176 dst=42.156.235.98 options=[] |<TCP  sport=47571 dport=https seq=3681001345 ack=1822908669 dataofs=5L reserved=0L flags=A window=65280 chksum=0x1ce7 urgptr=0 |>>>
             """

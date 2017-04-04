@@ -76,7 +76,9 @@ def scale_cflow():
     """
     计算每个cflow的4种13维向量
     """
-    scale_data_fph()
+    # scale_data_fph() #TODO
+    for cflow in cpanel.C_FLOWS:
+        cflow.fph = [0 for i in range(13)]
 
     for each in ['bps', 'ppf', 'bpp']:
         scale_data(each)

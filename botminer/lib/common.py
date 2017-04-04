@@ -5,20 +5,7 @@ from data import cpanel, conf
 from model import Cflow, Flow, Packet
 
 
-def read_pcap(group_id):
-    db = MySQLdb.connect(conf.DB.HOST, conf.DB.USER, conf.DB.PASS, conf.DB.NAME)
-    cursor = db.cursor()
-    sql = "select * from Packets where GROUP_ID={} order by id".format(group_id)
 
-    raw_packets = cursor.fetchmany(cursor.execute(sql))
-    print '[database] Selected Packets: {}'.format(len(raw_packets))
-
-    cpanel.START_TIME = raw_packets[0][2]
-    print '[common] START_TIME: %s' % str(cpanel.START_TIME)
-    for p in raw_packets:
-        cpanel.PACKETS.append(Packet(p))
-
-    print '[common] Packets loading finished.'
 
 
 def split_flow():
@@ -62,7 +49,7 @@ def split_cflow():
     filtered_cflows = []
     for _vector, _flows in cflow.iteritems():
         # TODO add filter here
-        filtered_cflows.append(Cflow(count, 24, _vector, _flows))  # TODO epoch调整为全局变量？动态获取？
+        filtered_cflows.append(Cflow(count, cpanel.group, 24, _vector, _flows))  # TODO epoch调整为全局变量？动态获取？
         count += 1
 
     cpanel.C_FLOWS = filtered_cflows
