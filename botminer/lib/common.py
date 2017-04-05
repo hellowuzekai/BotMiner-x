@@ -1,11 +1,7 @@
 # !/usr/bin/env python
 #  -*- coding: utf-8 -*-
-import MySQLdb
 from data import cpanel, conf
 from model import Cflow, Flow, Packet
-
-
-
 
 
 def split_flow():

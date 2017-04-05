@@ -47,6 +47,30 @@ botminer
 --------
 以`GROUP_ID`检索，从库中提取指定的Packets，分类计算flow/cflow值，生成8/52维向量
 
+* `cd ./botminer`
+* `python main.py 6 --save`
+
+```
+xy@kali:~/Desktop/botnet/BotMiner-x/botminer$ python main.py 6 --save
+[database] Selected Packets: 171863
+[common] START_TIME: 80.7388
+[common] Packets loading finished.
+[common] Total flows: 160796
+[common] Instant flows: 983
+[error] total-time=0, packet num: 3
+[common] Total C_flows: 82
+[common] Instant C_flows: 82
+[scale-data] Scale flow.bps, total: 983
+[scale-data] Scale flow.ppf, total: 983
+[scale-data] Scale flow.bpp, total: 983
+[calc] Data scaled success.
+[database] Saving cflow vectors into database.
+[!] [database] Group 6 already has 82 results, wants to overwrite? [Y/n]
+[database] Done, inserted items count: 82
+
+```
+
+
 **TODO**
 
 * 划分13个区间逻辑错误待修改 (完成)

@@ -11,8 +11,8 @@ from lib.database import save_calc_results,read_packets
 
 def main():
     if len(sys.argv) < 3:
-        exit('Usage: python main.py <GROUP_ID> <OUTPUT_PATH> [--debug]\n'
-             'Example: python main.py 2 ./output/result.csv')
+        exit('Usage: python main.py <GROUP_ID> [--save] [--debug]\n'
+             'Example: python main.py 2 --save')
     cpanel.group = sys.argv[1]
 
     init_options()
