@@ -13,7 +13,12 @@ def main():
     if '-h' in sys.argv or '--help' in sys.argv or len(sys.argv) < 5:
         helpmsg()
 
-    insert_packets()
+    delete = False
+    if '--delete' in sys.argv:  # delete local pcap file after loaded.
+        print "[system] File delete enabled."
+        delete = True
+
+    insert_packets(delete)
 
 
 if __name__ == '__main__':

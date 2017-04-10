@@ -57,7 +57,7 @@ def init_database():
     db.close()
 
 
-def insert_packets():
+def insert_packets(delete=False):
     filename = sys.argv[1]
     group_id = sys.argv[2]
     upload_time = sys.argv[3]
@@ -66,8 +66,6 @@ def insert_packets():
     db = MySQLdb.connect(DB.HOST, DB.USER, DB.PASS, DB.NAME)
     cursor = db.cursor()
 
-    # sql = "INSERT INTO DataGroup(ID, UPLOAD_TIME, UPLOAD_NAME, START_TIME)VALUES (" + group_id + ", '" + upload_time + "','" + upload_name + "', '" + str(
-    #     pcap[0].time - int(pcap[0].time) / 100 * 100) + "')"  # below 100s
     sql = "INSERT INTO DataGroup(ID, UPLOAD_TIME, UPLOAD_NAME, START_TIME)VALUES (" + group_id + ", '" + upload_time + "','" + upload_name + "', '" + "1000" + "')"  # below 100s
     cursor.execute(sql)
     db.commit()
@@ -99,6 +97,9 @@ def insert_packets():
                 length) + ", '" + ip_src + "','" + ip_dst + "', '" + port_src + "', '" + port_dst + "', '" + flag + "')"
             cursor.execute(sql)
             db.commit()
+
+        if delete:
+            os.remove(filename)
 
     if os.path.isfile(filename):
         insert_single_file(filename)

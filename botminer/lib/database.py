@@ -16,7 +16,7 @@ def read_packets(group_id):
     db = MySQLdb.connect(conf.DB.HOST, conf.DB.USER, conf.DB.PASS, conf.DB.NAME)
     cursor = db.cursor()
 
-    sql = "select * from Packets where GROUP_ID={} order by id".format(group_id)
+    sql = "select * from Packets where GROUP_ID={} order by TIMESTAMP".format(group_id)
     raw_packets = cursor.fetchmany(cursor.execute(sql))
     print '[database] Selected Packets: {}'.format(len(raw_packets))
 

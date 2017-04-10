@@ -6,7 +6,7 @@ from lib.common import split_cflow, split_flow, save
 from lib.calc import scale_cflow
 from lib.data import cpanel
 from lib.option import init_options
-from lib.database import save_calc_results,read_packets
+from lib.database import save_calc_results, read_packets
 
 
 def main():

@@ -12,7 +12,10 @@ Usage:
  Insert data
    1. mkdir data2
    2. editcap -c 1000 big.pcap ./data2/small.pcap
-   3. python main.py ./data2 <GROUP_ID> <TIME> <NOTE>
+   3. python main.py ./data2 <GROUP_ID> <TIME> <NOTE> [--delete]
+
+ Options
+   --delete  Delete local pcap file after loaded.
 
 """
 
