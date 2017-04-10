@@ -7,12 +7,13 @@ from lib.calc import scale_cflow
 from lib.data import cpanel
 from lib.option import init_options
 from lib.database import save_calc_results, read_packets
+from util.help import helpmsg
 
 
 def main():
-    if len(sys.argv) < 3:
-        exit('Usage: python main.py <GROUP_ID> [--save] [--debug]\n'
-             'Example: python main.py 2 --save')
+    if len(sys.argv) < 3 or '-h' in sys.argv:
+        helpmsg()
+
     cpanel.group = sys.argv[1]
 
     init_options()
@@ -28,7 +29,7 @@ def main():
         test()
 
     if '--outfile' in sys.argv:
-        output_path = './output/out.txt'
+        output_path = './output/results.txt'
         save(output_path)
 
 
