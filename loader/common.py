@@ -35,7 +35,7 @@ def init_database():
              PRIMARY KEY (ID),
              foreign key(GROUP_ID) references DataGroup(ID)
              )"""
-
+    cursor.execute(sql)
     sql = """CREATE TABLE  Cflow(
              ID INT NOT NULL AUTO_INCREMENT,
              GROUP_ID INT NOT NULL,
