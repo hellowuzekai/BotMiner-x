@@ -48,6 +48,30 @@ botminer
 以`GROUP_ID`检索，从库中提取指定的Packets，分类计算flow/cflow值，生成8/52维向量
 
 * `cd ./botminer`
+
+查看数据库状态  
+
+* `python main.py --status`
+
+```
+DATABASE_STATUS
+
+GROUP_ID | UPLOAD_TIME | UPLOAD_NAME | START_TIME | PACKETS | CALC_CFLOW
+1	5.28.15.23	cdxy	    1000.0	0	-
+2	5.28.15.23	cdxy	    1000.0	54	7
+3	1111	    cdxy-real-1	1000.0	26542	-
+5	1111	    cdxy-real-1	1000.0	105329	-
+6	1111	    cdxy-real-1	1000.0	171863	82
+7	111	        cdxy-real	1000.0	10207	-
+8	111	        cdxy-real	1000.0	62008	-
+9	111	        cdxy-real	1000.0	61997	-
+10	1	        cdxy-test	1000.0	61997	2678
+15	1	        cdxy-real	1000.0	5242606	32420
+
+```
+
+计算Cflow并存入数据库  
+
 * `python main.py 6 --save`
 
 ```
@@ -75,7 +99,7 @@ xy@kali:~/Desktop/botnet/BotMiner-x/botminer$ python main.py 6 --save
 
 * 划分13个区间逻辑错误待修改 (完成)
 * epoch 24小时不合理，待改进
-* cflow划分方式尝试只按ip_src分类 (完成)
+* cflow划分方式尝试只按ip_src分类 -> 目前按ip_src和ip_dst分类
 * 核心算法(x-means/others)待添加
 
 web

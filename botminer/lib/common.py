@@ -34,7 +34,7 @@ def split_flow():
 def split_cflow():
     cflow = {}
     for f in cpanel.FLOWS:
-        vector = f.ip_src
+        vector = ':'.join([f.ip_src, f.ip_dst])
         if vector in cflow:
             cflow[vector].append(f)
         else:
@@ -55,6 +55,9 @@ def split_cflow():
 def save(output_path):
     with open(output_path, 'w') as f:  # TODO more checks here
         for cf in cpanel.C_FLOWS:
-            line = ','.join([str(cf.id), str(cf.fph), str(cf.bps), str(cf.bpp), str(cf.ppf), str(cf.ip_src)]).replace(
-                '[', '').replace(']', '').replace(' ', '')
+            line = ','.join([
+                str(cf.id), str(cf.fph), str(cf.bps), str(cf.bpp),
+                str(cf.ppf), str(cf.ip_src), str(cf.ip_dst)]
+            ).replace('[', '').replace(']', '').replace(' ', '')
+
             f.write(line + '\n')
