@@ -27,11 +27,18 @@ if __name__ == '__main__':
     cflows += get_cflow_data(group_id=2)
     ip_src = []
     f = open("tmp.csv" ,"w+")
+    ip = open("ip.csv","w+")
     for i in xrange(len(cflows)):
         # f.write(cflows[i][7]+','+cflows[i][8]+','+cflows[i][9]+','+cflows[i][10]+"\n")
         f.write(cflows[i][8] + ',' + cflows[i][9] + ',' + cflows[i][10] + "\n")
-        ip_src.append(cflows[i][2])
+        ip.write(cflows[i][2]+"\n")
     f.close()
+    ip.close()
+    ip = open("ip.csv" ,"r")
+    ip_src = ip.read().split("\n")[:-1]
+    ip.close()
+    print len(ip_src)
+    print ip_src
     X = np.loadtxt("tmp.csv", delimiter=",", skiprows=0, ndmin=2)
     # plt.scatter(X[:, 0], X[:, 1], marker='*', c='r',s = 1)
     # plt.show()
@@ -84,13 +91,13 @@ if __name__ == '__main__':
     # for i in range(8):
     #     print len(brich[i]), brich[i]
 
-    print "9："
-    y_pred = Birch(n_clusters=36, threshold=0.1).fit_predict(X)
-    brich = [[], [], [], [], [], [],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
-    for i in xrange(len(y_pred)):
-        brich[y_pred[i]].append(ip_src[i])
-    for i in range(36):
-        print len(brich[i]), brich[i]
+    # print "9："
+    # y_pred = Birch(n_clusters=36, threshold=0.1).fit_predict(X)
+    # brich = [[], [], [], [], [], [],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+    # for i in xrange(len(y_pred)):
+    #     brich[y_pred[i]].append(ip_src[i])
+    # for i in range(36):
+    #     print len(brich[i]), brich[i]
     # print y_pred
     # plt.scatter(X[:, 0], X[:, 1], marker='*', c=['b','r','g'])
     # for i in xrange(len(ip_src)):
