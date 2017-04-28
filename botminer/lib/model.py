@@ -9,7 +9,7 @@ class Cflow:
         self.epoch = int(epoch)
         self.id = int(id)
 
-        self.ip_src, self.ip_dst = vector.split(':')  # TODO 暂时用ip_src+ip_dst定义cflow
+        self.ip_src, self.ip_dst, self.port_dst = vector.split(':')  # TODO 暂时用ip_src+ip_dst定义cflow
         self.group = group
         # self.port_src = flow.port_src
         # self.port_dst = flow.port_dst
