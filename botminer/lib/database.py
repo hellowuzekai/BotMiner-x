@@ -131,3 +131,17 @@ def show_database_status():
     print 'DATABASE_STATUS\n\nGROUP_ID | UPLOAD_TIME | UPLOAD_NAME | START_TIME | PACKETS | CALC_CFLOW'
     for g in groups:
         print('\t'.join([str(_) for _ in g]))
+
+
+def fetch_apanel_results(table_name, group_id):
+    """
+    从数据库中读取A-panel聚类结果
+    """
+
+    db = MySQLdb.connect(conf.DB.HOST, conf.DB.USER, conf.DB.PASS, conf.DB.NAME)
+    cursor = db.cursor()
+
+    sql = "select IP_SRC from {} where GROUP_ID={}".format(table_name, group_id)
+    raw_packets = cursor.fetchmany(cursor.execute(sql))
+    print '[database] Selected A-panel table:{} ,results:{}'.format(table_name, len(raw_packets))
+    return raw_packets
