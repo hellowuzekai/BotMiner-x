@@ -10,7 +10,7 @@ from apanel.cluster import apanel_cluster
 
 def init_database():
     cursor = db.cursor()
-    cursor.execute("create database if not exists BOTNET ;")
+    cursor.execute("create database if not exists BOTNET;")
     db.select_db("BOTNET")
     sql = """CREATE TABLE DataGroup(
              ID INT NOT NULL AUTO_INCREMENT,
@@ -62,6 +62,20 @@ def init_database():
              PORT_DST INT,
              PRIMARY KEY (ID)
              )"""
+    cursor.execute(sql)
+    sql = "ALTER TABLE Mirai ADD UNIQUE ( IP_SRC )" 
+    cursor.execute(sql)
+    sql = """CREATE TABLE  Ares(
+             ID INT NOT NULL AUTO_INCREMENT,
+             GROUP_ID INT NOT NULL,
+             IP_SRC VARCHAR(20),
+             IP_DST VARCHAR(20),
+             PORT_SRC INT,
+             PORT_DST INT,
+             PRIMARY KEY (ID)
+             )"""
+    cursor.execute(sql)
+    sql = "ALTER TABLE Ares ADD UNIQUE ( IP_SRC )" 
     cursor.execute(sql)
     db.commit()
 

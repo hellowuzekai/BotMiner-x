@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 #  -*- coding: utf-8 -*-
-from ..config import db
+from config import db
 
 
 class apanel_cluster:
@@ -10,15 +10,12 @@ class apanel_cluster:
         self.run()
 
     def detect_mirai(self):
-        # TODO 添加判断逻辑
-        if True:
+        if str(self.packet['Raw'].load) == '\x00\x00':
             self.insert_database('Mirai')
 
     def detect_ares(self):
-        # TODO 添加判断逻辑
-        if True:
+        if "api/pop" in str(self.packet['Raw'].load):
             self.insert_database('Ares')
-
     def insert_database(self, table_name):
         try:
             ip_src = self.packet['IP'].src
@@ -41,7 +38,10 @@ class apanel_cluster:
         db.commit()
 
     def run(self):
-        if self.detect_ares():
-            self.insert_database(self.packet, 'Ares')
-        if self.detect_mirai():
-            self.insert_database(self.packet, 'Mirai')
+        try:
+            if self.detect_ares():
+                self.insert_database(self.packet, 'Ares')
+            if self.detect_mirai():
+                self.insert_database(self.packet, 'Mirai')
+        except:
+            pass
