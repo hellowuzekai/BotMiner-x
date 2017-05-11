@@ -93,7 +93,20 @@ xy@kali:~/Desktop/botnet/BotMiner-x/botminer$ python main.py 6 --save
 [database] Done, inserted items count: 82
 
 ```
+进入script文件夹下，运行fetch_cflows.py将数据库相关数据导入文件
+```
+python fetch_cflows.py
+```
+然后进入 clusteringFinal 文件夹下，运行main.py得到聚类结果
+```
+python main.py
+```
+聚类结果保存在result文件夹下
 
+在botminer文件夹下运行main.py后跟参数 group_id 和 聚类结果csv文件，得到计算僵尸得分结果
+```
+python main.py group_id clusterFileName
+```
 
 **TODO**
 

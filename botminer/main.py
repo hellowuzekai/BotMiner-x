@@ -8,9 +8,16 @@ from lib.data import cpanel
 from lib.option import init_options
 from lib.database import save_calc_results, read_packets, show_database_status
 from util.help import helpmsg
-
+from cluster.cross import cross_cluster
 
 def main():
+    if '--calc' in sys.argv:
+        if len(sys.argv) != 4:
+            print "[*]Useage: python main.py group_id clusterFileName"
+            exit()
+        else:
+            cross_cluster(sys.argv[1], sys.argv[2])
+            exit()
     if '--status' in sys.argv:
         init_options()
         show_database_status()

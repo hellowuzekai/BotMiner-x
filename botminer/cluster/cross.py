@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 #  -*- coding: utf-8 -*-
-from ..lib.database import fetch_apanel_results
-
+from lib.database import fetch_apanel_results
+import sys
 
 class C:
     def __init__(self, id):
@@ -75,26 +75,38 @@ def get_list_by_host(host_id, As):
 
 
 # 混合计算的主入口
-def cross_cluster(group_id):
+def cross_cluster(group_id, CsFilenName):
     all_bot_ips = set()
-    As = []  # 全部A的聚类结果
+    As = [0,0]  # 全部A的聚类结果
 
     # 第一类
-    As['Mirai'] = A(id=1, weight=1.0, type='Mirai')  # 实例化一个A聚类
+    As[0] = A(id=1, weight=1.0, type='Mirai')  # 实例化一个A聚类
     for ip in fetch_apanel_results('Mirai', group_id):  # 从数据库中取数据
-        As['Mirai'].add_host(ip)
+        As[0].add_host(ip)
         all_bot_ips.add(ip)
 
     # 第二类
-    As['Ares'] = A(id=2, weight=1.0, type='Ares')
+    As[1] = A(id=2, weight=1.0, type='Ares')
     for ip in fetch_apanel_results('Ares', group_id):
-        As['Ares'].add_host(ip)
+        As[1].add_host(ip)
         all_bot_ips.add(ip)
 
     # TODO 将聚类后的结果导入Cs
     # TODO 修改后将本函数加入到程序的主流程之中
     Cs = []
+    csfile = open(CsFilenName,"r")
+    cs = csfile.read().split("\n")
+    count = 0
+    for c in cs:
+        c = c.split(",")
+        tmpc = C(count)
+        for i in c:
+            tmpc.add_host(i)
+        Cs.append(tmpc)
+        count += 1
 
     # 对所有被A-panel收录的IP计算僵尸得分
     for ip in all_bot_ips:
-        count_botscore(ip, As, Cs)
+        print count_botscore(ip, As, Cs)
+
+
